@@ -1,6 +1,6 @@
 /*
   # Lexer
-  
+
   The lexer is responsible for turning the input string into
   a list of tokens. Usually a token looks the following way:
 
@@ -12,9 +12,11 @@
   ```
 
   In our case we're keeping everything simplified and store
-  only the token's value. We can infer the type based on
+  only the token's value. Later, we can infer the type based on
   regular expressions defined below.
+
 */
+
 const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
 
 /*
@@ -26,13 +28,13 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
   we use recursive descent parsing to produce the AST
   from the input token array.
 
-  Visually, the parsing is a process which turns the array:
+  Visually, parsing is a process which will turn the token array:
 
   ```javascript
   const tokens = ["-", "2", "+", "1", "3", "4"];
   ```
 
-  to the following tree:
+  into the following tree:
 
   ```
     -
@@ -41,13 +43,16 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
     1 3 4
   ```
 
-  The parser uses the following grammar to parse the input token array:
+  This parser uses the following grammar to parse the input token array:
 
   ```
   num := 0-9
   op := + | - | / | *
   expr := num | op expr* | (expr)
   ```
+
+  For details see https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form.
+
 */
 
 const Op = Symbol('op');
@@ -110,13 +115,14 @@ const parse = tokens => {
 
   # Evaluator
 
-  Finally, this is our evaluator. In it we simply visit each node
-  from the tree with pre-order traversal and either:
+  The evaluator visits each node from the tree with pre-order
+  traversal and either:
 
   - Return the corresponding value, in case the node is of type number.
   - Perform the corresponding arithmetic operation, in case of a `OpNode`.
 
 */
+
 const eval = ast => {
   const reduce = (op, args) => args.reduce((p, c) => op(p, c), 0);
   const sum = args => reduce((a, b) => b + a, args);
@@ -140,11 +146,12 @@ const eval = ast => {
 /*
   # Interpreter
 
-  In order to interpret the input stream we feed the parser with the input
+  In order to interpret the input string we feed the parser with the output
   from the lexer and the evaluator with the output of the parser.
-  
+
 */
 
 const program = '- 2 + 1 3 4';
 const ast = parse(lex(program));
 console.log(eval(ast));
+
