@@ -99,7 +99,6 @@ const parse = tokens => {
 
   - Return the corresponding value, in case the node is of type number.
   - Perform the corresponding arithmetic operation, in case of an operation node.
-
 */
 const eval = ast => {
   const reduce = (op, args, init = 0) => args.reduce(op, init);
@@ -126,9 +125,9 @@ const eval = ast => {
 
   In order to interpret the input stream we feed the parser with the input
   from the lexer and the evaluator with the output of the parser.
-
 */
 
 const program = '* 3 - 2 + 1 3 4';
 const ast = parse(lex(program));
 console.log(eval(ast));
+
