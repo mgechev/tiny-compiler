@@ -1,6 +1,6 @@
 /*
   # Lexer
-  
+
   The lexer is responsible for turning the input string into
   a list of tokens. Usually a token looks the following way:
 
@@ -46,15 +46,13 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
   ```
   num := 0-9
   op := + | - | / | *
-  expr := num | op expr* | (expr)
+  expr := num | op expr*
   ```
 */
 
 const Op = Symbol('op');
 const Num = Symbol('num');
-
-const opre = /(\+|-|\*|\/)/;
-const numre = /[0-9]/;
+const NumRe = /[0-9]/;
 
 const parse = tokens => {
 
@@ -77,15 +75,7 @@ const parse = tokens => {
     return node;
   };
 
-  const parseExpr = () => {
-    let node;
-    if (numre.test(cur())) {
-      node = parseNum();
-    } else if (opre.test(cur())) {
-      node = parseOp();
-    }
-    return node;
-  };
+  const parseExpr = () => NumRe.test(cur()) ? parseNum() : parseOp();
 
   return parseExpr();
 };
