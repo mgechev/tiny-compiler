@@ -52,30 +52,23 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
 
 const Op = Symbol('op');
 const Num = Symbol('num');
-const NumRe = /[0-9]/;
 
 const parse = tokens => {
 
   let c = 0;
 
   const cur = () => tokens[c];
-  const next = () => tokens[++c];
-  const prev = () => tokens[--c];
+  const next = () => tokens[c++];
 
-  const parseNum = () => {
-    const node = { val: parseInt(cur()), type: Num };
-    next();
-    return node;
-  };
+  const parseNum = () => ({ val: parseInt(next()), type: Num });
 
   const parseOp = () => {
-    const node = { val: cur(), type: Op, expr: [] };
-    next();
+    const node = { val: next(), type: Op, expr: [] };
     while (cur()) node.expr.push(parseExpr());
     return node;
   };
 
-  const parseExpr = () => NumRe.test(cur()) ? parseNum() : parseOp();
+  const parseExpr = () => /\d/.test(cur()) ? parseNum() : parseOp();
 
   return parseExpr();
 };
@@ -92,22 +85,16 @@ const parse = tokens => {
 */
 const eval = ast => {
   const reduce = (op, args, init = 0) => args.reduce(op, init);
-  const sum = args => reduce((a, b) => b + a, args);
-  const sub = args => reduce((a, b) => b - a, args);
-  const div = args => reduce((a, b) => b / a, args, 1);
-  const mul = args => reduce((a, b) => b * a, args, 1);
 
   const opAcMap = {
-    '+': sum,
-    '-': sub,
-    '/': div,
-    '*': mul
+    '+': args => reduce((a, b) => b + a, args),
+    '-': args => reduce((a, b) => b - a, args),
+    '/': args => reduce((a, b) => b / a, args, 1),
+    '*': args => reduce((a, b) => b * a, args, 1)
   };
 
-  switch (ast.type) {
-    case Num: return ast.val;
-    case Op: return opAcMap[ast.val](ast.expr.map(e => eval(e)));
-  }
+  if (ast.type === Num) return ast.val;
+  return opAcMap[ast.val](ast.expr.map(e => eval(e)));
 };
 
 /*
@@ -118,6 +105,5 @@ const eval = ast => {
 */
 
 const program = '* 3 - 2 + 1 3 4';
-const ast = parse(lex(program));
-console.log(eval(ast));
+console.log(eval(parse(lex(program))));
 
