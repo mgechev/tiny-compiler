@@ -96,13 +96,11 @@ const parse = tokens => {
   - Perform the corresponding arithmetic operation, in case of an operation node.
 */
 const eval = ast => {
-  const reduce = (op, args, init = 0) => args.reduce(op, init);
-
   const opAcMap = {
-    'sum': args => reduce((a, b) => b + a, args),
-    'sub': args => reduce((a, b) => b - a, args),
-    'div': args => reduce((a, b) => b / a, args, 1),
-    'mul': args => reduce((a, b) => b * a, args, 1)
+    'sum': args => args.reduce((a, b) => a + b, 0),
+    'sub': args => args.reduce((a, b) => a - b),
+    'div': args => args.reduce((a, b) => a / b),
+    'mul': args => args.reduce((a, b) => a * b, 1)
   };
 
   if (ast.type === Num) return ast.val;
