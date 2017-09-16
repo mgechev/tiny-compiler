@@ -1,8 +1,8 @@
-# Tiny Interepter and Transpiler
+# Tiny Interepter and Compiler
 
 A tiny interpreter and compiler which shows the basics of compiler development.
 
-For more details see [the source](./tiny.js) or my blog post "[Implementing a Simple Compiler on 25 Lines of JavaScript](http://blog.mgechev.com/2017/09/16/simple-interpreter-transpiler-compiler-tutorial/)"
+For more details see [the source](./tiny.js) or my blog post "[Implementing a Simple Compiler on 25 Lines of JavaScript](http://blog.mgechev.com/2017/09/16/developing-simple-interpreter-transpiler-compiler-tutorial/)"
 
 Along the implementation you can find sample (and simple) implementations of:
 
@@ -11,6 +11,12 @@ Along the implementation you can find sample (and simple) implementations of:
 - Interpreter which traverses and evaluates the AST.
 - EBNF grammar.
 - Recursive Descent Parsing.
+
+## You want even smaller compiler?
+
+Here it is!
+
+[![Compiler in a Tweet](/assets/tweet.png)](https://twitter.com/mgechev/status/955211214719602688)
 
 # License
 
