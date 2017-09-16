@@ -2,7 +2,7 @@
 
 A tiny interpreter and compiler which shows the basics of compiler development.
 
-For more details see [the source](./tiny.js) or my blog post "[Implementing a Simple Compiler on 25 Lines of JavaScript](http://blog.mgechev.com/2017/09/16/simple-interpreter-transpiler-compiler-tutorial/)"
+For more details see [the source](./tiny.js) or my blog post "[Implementing a Simple Compiler on 25 Lines of JavaScript](http://blog.mgechev.com/2017/09/16/developing-simple-interpreter-transpiler-compiler-tutorial/)"
 
 Along the implementation you can find sample (and simple) implementations of:
 
