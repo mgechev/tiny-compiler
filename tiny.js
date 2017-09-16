@@ -14,6 +14,18 @@
   In our case we're keeping everything simplified and store
   only the token's value. We can infer the type based on
   regular expressions defined below.
+
+  In short, `lex` will turn the following expression:
+
+  ```
+  mul 3 sub 2 sum 1 3 4
+  ```
+
+  To the following array:
+
+  ```
+  ["mul", "3", "sub", "2", "sum", "1", "3", "4"]
+  ```
 */
 const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
 
@@ -29,15 +41,15 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
   Visually, the parsing is a process which turns the array:
 
   ```javascript
-  const tokens = ["-", "2", "+", "1", "3", "4"];
+  const tokens = ["sub", "2", "sum", "1", "3", "4"];
   ```
 
   to the following tree:
 
   ```
-    -
+   sub
    / \
-  2   +
+  2  sum
     1 3 4
   ```
 
@@ -45,8 +57,8 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
 
   ```
   num := 0-9
-  op := + | - | / | *
-  expr := num | op expr*
+  op := sum | sub | div | mul
+  expr := num | op expr+
   ```
 */
 
@@ -87,10 +99,10 @@ const eval = ast => {
   const reduce = (op, args, init = 0) => args.reduce(op, init);
 
   const opAcMap = {
-    '+': args => reduce((a, b) => b + a, args),
-    '-': args => reduce((a, b) => b - a, args),
-    '/': args => reduce((a, b) => b / a, args, 1),
-    '*': args => reduce((a, b) => b * a, args, 1)
+    'sum': args => reduce((a, b) => b + a, args),
+    'sub': args => reduce((a, b) => b - a, args),
+    'div': args => reduce((a, b) => b / a, args, 1),
+    'mul': args => reduce((a, b) => b * a, args, 1)
   };
 
   if (ast.type === Num) return ast.val;
@@ -98,12 +110,35 @@ const eval = ast => {
 };
 
 /*
+
+  # Code generator
+
+  Alternatively, instead of interpreting the AST, we can translate
+  it to another language. Here's how we can do that with JavaScript.
+*/
+const transpile = ast => {
+  const opMap = { sum: '+', mul: '*', sub: '-', div: '/' };
+  const transpileNum = ast => ast.val;
+  const transpileOp = ast => `(${ast.expr.map(transpile).join(' ' + opMap[ast.val] + ' ')})`;
+  const transpile = ast => ast.type === Num ? transpileNum(ast) : transpileOp(ast);
+  return transpile(ast);
+};
+
+const program = 'mul 3 sub 2 sum 1 3 4';
+
+/*
   # Interpreter
 
   In order to interpret the input stream we feed the parser with the input
   from the lexer and the evaluator with the output of the parser.
 */
-
-const program = '* 3 - 2 + 1 3 4';
 console.log(eval(parse(lex(program))));
 
+/*
+
+  # Transpiler
+
+  In order to transpile the expression to JavaScript, the only change we need to make
+  is to update the outermost `eval` invocation to `transpile`.
+*/
+console.log(transpile(parse(lex(program))));
