@@ -50,6 +50,7 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
    sub
    / \
   2  sum
+     /|\
     1 3 4
   ```
 
