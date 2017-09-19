@@ -70,18 +70,18 @@ const parse = tokens => {
 
   let c = 0;
 
-  const cur = () => tokens[c];
-  const next = () => tokens[c++];
+  const peek = () => tokens[c];
+  const consume = () => tokens[c++];
 
-  const parseNum = () => ({ val: parseInt(next()), type: Num });
+  const parseNum = () => ({ val: parseInt(consume()), type: Num });
 
   const parseOp = () => {
-    const node = { val: next(), type: Op, expr: [] };
-    while (cur()) node.expr.push(parseExpr());
+    const node = { val: consume(), type: Op, expr: [] };
+    while (peek()) node.expr.push(parseExpr());
     return node;
   };
 
-  const parseExpr = () => /\d/.test(cur()) ? parseNum() : parseOp();
+  const parseExpr = () => /\d/.test(peek()) ? parseNum() : parseOp();
 
   return parseExpr();
 };
