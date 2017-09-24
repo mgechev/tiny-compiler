@@ -30,7 +30,6 @@
 const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
 
 /*
-
   # Parser
 
   The parser is responsible for turing the list of tokens
@@ -87,7 +86,6 @@ const parse = tokens => {
 };
 
 /*
-
   # Evaluator
 
   Finally, this is our evaluator. In it we simply visit each node
@@ -109,7 +107,6 @@ const eval = ast => {
 };
 
 /*
-
   # Code generator
 
   Alternatively, instead of interpreting the AST, we can translate
@@ -134,10 +131,10 @@ const program = 'mul 3 sub 2 sum 1 3 4';
 console.log(eval(parse(lex(program))));
 
 /*
-
   # Transpiler
 
   In order to transpile the expression to JavaScript, the only change we need to make
   is to update the outermost `eval` invocation to `transpile`.
 */
 console.log(transpile(parse(lex(program))));
+
