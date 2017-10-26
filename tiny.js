@@ -96,10 +96,10 @@ const parse = tokens => {
 */
 const eval = ast => {
   const opAcMap = {
-    'sum': args => args.reduce((a, b) => a + b, 0),
-    'sub': args => args.reduce((a, b) => a - b),
-    'div': args => args.reduce((a, b) => a / b),
-    'mul': args => args.reduce((a, b) => a * b, 1)
+    sum: args => args.reduce((a, b) => a + b, 0),
+    sub: args => args.reduce((a, b) => a - b),
+    div: args => args.reduce((a, b) => a / b),
+    mul: args => args.reduce((a, b) => a * b, 1)
   };
 
   if (ast.type === Num) return ast.val;
