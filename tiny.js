@@ -103,7 +103,7 @@ const eval = ast => {
   };
 
   if (ast.type === Num) return ast.val;
-  return opAcMap[ast.val](ast.expr.map(e => eval(e)));
+  return opAcMap[ast.val](ast.expr.map(eval));
 };
 
 /*
