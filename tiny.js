@@ -32,7 +32,7 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
 /*
   # Parser
 
-  The parser is responsible for turing the list of tokens
+  The parser is responsible for turning the list of tokens
   into an AST or Abstract Syntax Tree. In the example below
   we use recursive descent parsing to produce the AST
   from the input token array.
@@ -56,10 +56,17 @@ const lex = str => str.split(' ').map(s => s.trim()).filter(s => s.length);
   The parser uses the following grammar to parse the input token array:
 
   ```
-  num := 0-9
+  num := 0-9+
   op := sum | sub | div | mul
   expr := num | op expr+
   ```
+
+  This translated to plain English, means:
+  - `num` can be any sequence of the numbers between 0 and 9.
+  - `op` can be any of `sum`, `sub`, `div`, `mul`.
+  - `expr` can be either a number (i.e. `num`) or an operation followed by one or more `expr`s.
+
+  Notice that `expr` has a recursive declaration.
 */
 
 const Op = Symbol('op');
@@ -94,7 +101,7 @@ const parse = tokens => {
   - Return the corresponding value, in case the node is of type number.
   - Perform the corresponding arithmetic operation, in case of an operation node.
 */
-const eval = ast => {
+const evaluate = ast => {
   const opAcMap = {
     sum: args => args.reduce((a, b) => a + b, 0),
     sub: args => args.reduce((a, b) => a - b),
@@ -103,7 +110,7 @@ const eval = ast => {
   };
 
   if (ast.type === Num) return ast.val;
-  return opAcMap[ast.val](ast.expr.map(eval));
+  return opAcMap[ast.val](ast.expr.map(evaluate));
 };
 
 /*
@@ -112,12 +119,12 @@ const eval = ast => {
   Alternatively, instead of interpreting the AST, we can translate
   it to another language. Here's how we can do that with JavaScript.
 */
-const transpile = ast => {
+const compile = ast => {
   const opMap = { sum: '+', mul: '*', sub: '-', div: '/' };
-  const transpileNum = ast => ast.val;
-  const transpileOp = ast => `(${ast.expr.map(transpile).join(' ' + opMap[ast.val] + ' ')})`;
-  const transpile = ast => ast.type === Num ? transpileNum(ast) : transpileOp(ast);
-  return transpile(ast);
+  const compileNum = ast => ast.val;
+  const compileOp = ast => `(${ast.expr.map(compile).join(' ' + opMap[ast.val] + ' ')})`;
+  const compile = ast => ast.type === Num ? compileNum(ast) : compileOp(ast);
+  return compile(ast);
 };
 
 const program = 'mul 3 sub 2 sum 1 3 4';
@@ -128,13 +135,13 @@ const program = 'mul 3 sub 2 sum 1 3 4';
   In order to interpret the input stream we feed the parser with the input
   from the lexer and the evaluator with the output of the parser.
 */
-console.log(eval(parse(lex(program))));
+console.log(evaluate(parse(lex(program))));
 
 /*
-  # Transpiler
+  # Compiler
 
-  In order to transpile the expression to JavaScript, the only change we need to make
-  is to update the outermost `eval` invocation to `transpile`.
+  In order to compile the expression to JavaScript, the only change we need to make
+  is to update the outermost `evaluate` invocation to `compile`.
 */
-console.log(transpile(parse(lex(program))));
+console.log(compile(parse(lex(program))));
 
