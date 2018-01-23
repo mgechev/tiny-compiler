@@ -12,6 +12,12 @@ Along the implementation you can find sample (and simple) implementations of:
 - EBNF grammar.
 - Recursive Descent Parsing.
 
+## You want even smaller compiler?
+
+Here it is!
+
+[![Compiler in a Tweet](/assets/tweet.png)](https://twitter.com/mgechev/status/955211214719602688)
+
 # License
 
 MIT
