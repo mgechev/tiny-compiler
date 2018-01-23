@@ -93,6 +93,48 @@ const parse = tokens => {
 };
 
 /*
+The AST generated is stored in `parse` variable in the form of a javascript object:
+parse = {
+	val: 'mul',
+	type: Op,
+	expr: [
+		{
+			val: '3',
+			type: Num
+		},
+		{
+			val: 'sub',
+			type: Op,
+			expr: [
+				{
+					val: '2',
+					type: Num
+				},
+				{
+					val: 'sum',
+					type: Op,
+					expr: [
+						{
+							val: '1',
+							type: Num
+						},
+						{
+							val: '2',
+							type: Num
+						},
+						{
+							val: '3',
+							type: Num
+						}
+					]
+				}
+			]
+		}
+	]
+};
+*/
+
+/*
   # Evaluator
 
   Finally, this is our evaluator. In it we simply visit each node
