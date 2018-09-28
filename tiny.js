@@ -75,7 +75,6 @@ const Num = Symbol('num');
 const parse = tokens => {
 
   let c = 0;
-
   const peek = () => tokens[c];
   const consume = () => tokens[c++];
 
